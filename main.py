@@ -40,9 +40,8 @@ def habrTG(message):
 
 @bot.message_handler(content_types=['text'], commands=["habr"])
 def habrTG(message):
-        if str(message.from_user.id) == "426156432":
-        x = habr()
-        for i in x[0:3]:
+    if str(message.from_user.id) == "426156432":
+        for i in habr()[0:3]:
             bot.send_message(message.from_user.id, i )
     else:
         bot.send_message(message.from_user.id, "НЕРАСПОЗНАН :(")
@@ -50,8 +49,7 @@ def habrTG(message):
 @bot.message_handler(content_types=['text'], commands=["fl"])
 def flTG(message):
     if str(message.from_user.id) == "426156432":
-        x = fl()
-        for i in x[0:3]:
+        for i in fl()[0:3]:
             bot.send_message(message.from_user.id, i )
     else:
         bot.send_message(message.from_user.id, "НЕРАСПОЗНАН :(")
