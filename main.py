@@ -13,7 +13,7 @@ def habr():
     list_habr = []
     for i in range(len(task)):
         list_habr.append(task[i].text + "\n" + responses[i].text + "\n" + "https://freelance.habr.com" + soup.select(f'#tasks_list > li:nth-child({i+1}) > article > div > header > div.task__title > a')[0].get('href'))
-    return list_habr.reverse()
+    return list_habr[::-1]
 
 def fl():
     url = 'https://www.fl.ru/search/?action=search&type=projects&search_string=python'
@@ -25,8 +25,7 @@ def fl():
     list_fl = []
     for i in range(len(task)):
         list_fl.append(soup.select(f'#search-lenta > div:nth-child({i+1}) > div > h3')[0].text + "\n" + soup.select(f'#search-lenta > div:nth-child({i+1}) > div > p')[0].text.replace(' ... ','') + "\n" + "https://www.fl.ru" + soup.select(f'#search-lenta > div:nth-child({i+1}) > div > h3 > a')[0].get('href'))
-    return list_fl.reverse()
-
+    return list_fl[::-1]
 
 token = "5262384131:AAFD2_JdieEHWPOlaSOfcwOR2JJQN6Cg0P4"
 bot = telebot.TeleBot(token)
@@ -35,16 +34,26 @@ bot = telebot.TeleBot(token)
 def start(message):
     bot.send_message(message.from_user.id, "Привет! Сюда будут приходить заказы с фриланс сайтов для языка Python")
 
+@bot.message_handler(content_types=['text'], commands=["ID"])
+def habrTG(message):
+    bot.send_message(message.from_user.id, message.from_user.id )
+
 @bot.message_handler(content_types=['text'], commands=["habr"])
 def habrTG(message):
-    if str(message.from_user.id) == "42615643":
-        bot.send_message(message.from_user.id, habr() )
+        if str(message.from_user.id) == "426156432":
+        x = habr()
+        for i in x[0:3]:
+            bot.send_message(message.from_user.id, i )
     else:
-        bot.send_message(message.from_user.id, error.NoneName)
+        bot.send_message(message.from_user.id, "НЕРАСПОЗНАН :(")
 
 @bot.message_handler(content_types=['text'], commands=["fl"])
 def flTG(message):
-    if str(message.from_user.id) == "42615643":
-        bot.send_message(message.from_user.id, fl() )
+    if str(message.from_user.id) == "426156432":
+        x = fl()
+        for i in x[0:3]:
+            bot.send_message(message.from_user.id, i )
     else:
-        bot.send_message(message.from_user.id, error.NoneName)
+        bot.send_message(message.from_user.id, "НЕРАСПОЗНАН :(")
+
+bot.polling(none_stop=True, interval=0)
