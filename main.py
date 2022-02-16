@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+import telebot
+import os
 
-
-def Habr():
+def habr():
     url = 'https://freelance.habr.com/tasks?q=%5Bpython%E2%80%8B%5D?q=%5Bpython%E2%80%8B%5D'
 
     response = requests.get(url)
@@ -25,3 +26,25 @@ def fl():
     for i in range(len(task)):
         list_fl.append(soup.select(f'#search-lenta > div:nth-child({i+1}) > div > h3')[0].text + "\n" + soup.select(f'#search-lenta > div:nth-child({i+1}) > div > p')[0].text.replace(' ... ','') + "\n" + "https://www.fl.ru" + soup.select(f'#search-lenta > div:nth-child({i+1}) > div > h3 > a')[0].get('href'))
     return list_fl.reverse()
+
+
+token = "5262384131:AAFD2_JdieEHWPOlaSOfcwOR2JJQN6Cg0P4"
+bot = telebot.TeleBot(token)
+
+@bot.message_handler(commands=["start"])
+def start(message):
+    bot.send_message(message.from_user.id, "Привет! Сюда будут приходить заказы с фриланс сайтов для языка Python")
+
+@bot.message_handler(content_types=['text'], commands=["habr"])
+def habrTG(message):
+    if str(message.from_user.id) == "42615643":
+        bot.send_message(message.from_user.id, habr() )
+    else:
+        bot.send_message(message.from_user.id, error.NoneName)
+
+@bot.message_handler(content_types=['text'], commands=["fl"])
+def flTG(message):
+    if str(message.from_user.id) == "42615643":
+        bot.send_message(message.from_user.id, fl() )
+    else:
+        bot.send_message(message.from_user.id, error.NoneName)
